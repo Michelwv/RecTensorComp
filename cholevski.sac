@@ -22,11 +22,9 @@ double, bool rec(int i, int j, double[3,3] a, double[3,3] l, bool[3,3] b_l){
     return (ret, ret_b);
 }
 
-bool check(bool cycle, bool done){
-    if (cycle){
-        rterror_d::conditionalAbort(true);
-    }
-    return !done;
+bool error(){
+    rterror_d::conditionalAbort(true);
+    return false;
 }
 
 int main(){
@@ -42,7 +40,7 @@ int main(){
         cycle = all(b_l == bp_l);
         done = all(bp_l);
         b_l = bp_l;
-    }while(check(cycle, done));
+    }while(cycle ? error() : !done);
     StdIO::print(l);
     return 0;
 }
