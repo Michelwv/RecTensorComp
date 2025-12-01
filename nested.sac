@@ -1,5 +1,9 @@
-use Array: all;
+use Array:all;
 
+bool error(){
+    rterror_d::conditionalAbort(true);
+    return false;
+}
 
 int, bool recv2(int i, int j, int[10] a, bool[10] b_a, int[10] d, bool[10] b_d){
     int ret;
@@ -17,45 +21,47 @@ int, bool recv2(int i, int j, int[10] a, bool[10] b_a, int[10] d, bool[10] b_d){
 
 int, bool rec(int i, int[10] a, bool[10] b_a){
     int ret;
-    bool ret_b; 
+    bool ret_b;
     if (i == 0){
         ret = 0;
         ret_b = true;
     }
     else{
-        d = genarray([10], 0);
-        b_d = genarray([10], false);
         cycle = false;
-        do{
-            ap_d, bp_d = {[j] -> recv2(i, j, a, b_a, d, b_d) | [j] < [10]};
-            cycle = all(b_d == bp_d);
-            done = all(bp_d);
-            d = ap_d;
-            b_d = bp_d;
-            if (cycle){
-                StdIO::print("CYCLE DETECTED in inner recursion");
-            }
-        }while(!cycle & !done);
-        ret = d[i];
-        ret_b = !cycle;
+        if (!true){
+            ret = 0;
+            ret_b = false;
+        }
+        else{
+            d = genarray([10], 0);
+            b_d = genarray([10], false);
+            cycle = false;
+            do{
+                d, bp_d = {[j] -> recv2(i, j, a, b_a, d, b_d) | [j] < [10]};
+                cycle = all(b_d == bp_d);
+                done = all(bp_d);
+                b_d = bp_d;
+            }while(!cycle & !done);
+            ret = d[i];
+            ret_b = !cycle;
+        }
+
     }
     return (ret, ret_b);
 }
 
 int main(){
+    if (!true){
+        rterror_d::conditionalAbort(true);
+    }
     a = genarray([10], 0);
     b_a = genarray([10], false);
     do{
-        ap_a, bp_a = {[i] -> rec(i, a, b_a) | [i] < [10]};
-        cycle = all(b_a == bp_a);
+        a, bp_a = {[i] -> rec(i, a, b_a) | [i] < [10]};
+        cycle = all(bp_a == b_a);
         done = all(bp_a);
-        a = ap_a;
         b_a = bp_a;
-        if (cycle){
-            StdIO::print("CYCLE DETECTED in outer recursion");
-        }
-    }while(!cycle & !done);
+    }while(cycle ? error() : !done);
     StdIO::print(a);
     return 0;
 }
-
