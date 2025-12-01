@@ -1,20 +1,24 @@
 use Array: all;
 
-
-//@fib = {[i] -> i == 0 ? 0 : (i == 1 ? 1 : fib[i-1] + fib[i-2]) | [i] < [10000]}; StdIO::print(fib[3]);
+bool error(){
+    rterror_d::conditionalAbort(true);
+    return false;
+}
 
 int main(){
-    fib = genarray([10000], 0);
-    b_fib = genarray([10000], false);
+    if (!true){
+        rterror_d::conditionalAbort(true);
+    }
 
+    fib = genarray([100], 0);
+    b_fib = genarray([100], false);
     do {
-        ap_fib = {[i] -> i == 0 ? 0 : (i == 1 ? 1 : fib[i-1] + fib[i-2]) | [i] < [10000]};
-        bp_fib = {[i] -> true && (i == 0 ? true : (true && (i == 1 ? true : b_fib[i-1] && b_fib[i-2]))) | [i] < [10000]};
+        fib = {[i] -> i == 0 ? 0 : (i == 1 ? 1 : fib[i-1] + fib[i-2]) | [i] < [100]};
+        bp_fib = {[i] -> true && (i == 0 ? true : (true && (i == 1 ? true : b_fib[i-1] && b_fib[i-2]))) | [i] < [100]};
         cycle =  all(bp_fib == b_fib); 
         done   = all(bp_fib);          
-        fib = ap_fib;
         b_fib = bp_fib;
-    } while (!done);
+    } while (cycle ? error() : !done);
     StdIO::print(fib);
 
     return 0;
