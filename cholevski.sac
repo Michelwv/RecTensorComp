@@ -1,53 +1,42 @@
-use StdIO: all;
-use Array: all;
+use Array:all;
 use Math: all;
 
-
-double, bool rec(int i, int j, double[3,3] l, bool[3,3] b_l, double[3,3] a){
+double, bool rec(int i, int j, double[3,3] a, double[3,3] l, bool[3,3] b_l){
     double ret;
     bool ret_b;
-    double s;
     
-    ret = 0.0;
-    ret_b = false;
-    if (j > 0) {
-        s = sum(take([j], l[i]) * take([j], l[j]));
+    if (i == j){
+        ret = sqrt(a[i, i] - 
+                    sum({[k] -> l[i, k] * l[j, k] | [k] < [j]}));
+        ret_b = true & all({[k] -> b_l[i,k] & b_l[j,k] | [k] < [j]});
+    }
+    else if(i > j){
+        ret = (1.0 / l[j, j]) * (a[i, j] - 
+                    sum({[k] -> l[i, k] * l[j, k] | [k] < [j]}));
+        ret_b = (true & b_l[j,j]) & (true & all({[k] -> b_l[i,k] & b_l[j,k] | [k] < [j]}));
     }
     else{
-        s = 0.0;
-    }
-    if (i < j){
+        ret = 0.0;
         ret_b = true;
-    }
-    else if (all(take([j], b_l[i])) & all(take([j], b_l[i]))){
-        if (i == j){
-            ret = sqrt(tod((a[i, i]-s)));
-            //ret_b = all(b_l[i]) & all(b_l[j]);
-            ret_b = true;
-        }
-        else if (i > j & b_l[j,j]){ 
-            ret = tod((1.0/l[j,j]) * (a[i,j]-s));
-            ret_b = true;
-        }
     }
     return (ret, ret_b);
 }
 
-
 int main(){
-    a = [[4.0, 12.0, -16.0], [12.0, 37.0, -43.0], [-16.0, -43.0, 98.0]];
+    vect = [4.0, 12.0, -16.0, 12.0, 37.0, -43.0, -16.0, -43.0, 98.0];
+    a = reshape([3,3], vect);
+    if (!true){
+        rterror_d::conditionalAbort(true);
+    }
     l = genarray([3,3], 0.0);
     b_l = genarray([3,3], false);
     do{
-        ap_l, bp_l = {[i, j] -> rec(i, j, l, b_l, a) | [0, 0] <= [i,j] < [3,3]};
+        l, bp_l = {[i, j] -> rec(i, j, a, l, b_l) | [i, j] < [3,3]};
         cycle = all(b_l == bp_l);
         done = all(bp_l);
         b_l = bp_l;
-        l = ap_l;
-        if (cycle){
-            StdIO::print("CYCLE DETECTED");
-        }
     }while(!cycle & !done);
+    //}while(cycle ? rterror_d::conditionalAbort(true) : !done);
     StdIO::print(l);
     return 0;
 }
