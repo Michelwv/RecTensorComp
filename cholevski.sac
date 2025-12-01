@@ -22,6 +22,13 @@ double, bool rec(int i, int j, double[3,3] a, double[3,3] l, bool[3,3] b_l){
     return (ret, ret_b);
 }
 
+bool check(bool cycle, bool done){
+    if (cycle){
+        rterror_d::conditionalAbort(true);
+    }
+    return !done;
+}
+
 int main(){
     vect = [4.0, 12.0, -16.0, 12.0, 37.0, -43.0, -16.0, -43.0, 98.0];
     a = reshape([3,3], vect);
@@ -35,8 +42,7 @@ int main(){
         cycle = all(b_l == bp_l);
         done = all(bp_l);
         b_l = bp_l;
-    }while(!cycle & !done);
-    //}while(cycle ? rterror_d::conditionalAbort(true) : !done);
+    }while(check(cycle, done));
     StdIO::print(l);
     return 0;
 }
