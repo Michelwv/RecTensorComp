@@ -1,0 +1,42 @@
+use Array: all;
+
+int, bool rec(int[m] a, bool[m] b, int i){
+    int ret;
+    bool ret_b;
+    if (i == 0){
+        ret = 0;
+        ret_b = true;
+    }
+    else if (i == 1){
+        ret = 1;
+        ret_b = true;
+    }
+    else{
+        ret = a[i-1] + a[i-2];
+        ret_b = b[i-1] & b[i-2];
+    }
+    return (ret, ret_b);
+}
+
+bool error(){
+    rterror_d::conditionalAbort(true);
+    return false;
+}
+
+int main(){
+    if (!true){
+        rterror_d::conditionalAbort(true);
+    }
+    fib = genarray([100], 0);
+    b_fib = genarray([100], false);
+
+    do {
+        fib, bp_fib = {[i] -> rec(fib, b_fib, i) | [i] < [100]};
+        cycle =  all(bp_fib == b_fib); 
+        done   = all(bp_fib);          
+        b_fib = bp_fib;
+    } while (cycle ? error() : !done);
+    StdIO::print(fib);
+
+    return 0;
+}
