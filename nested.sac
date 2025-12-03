@@ -27,25 +27,20 @@ int, bool rec(int i, int[10] a, bool[10] b_a){
         ret_b = true;
     }
     else{
-        cycle = false;
         if (!true){
-            ret = 0;
-            ret_b = false;
+            rterror_d::conditionalAbort(true);
         }
-        else{
-            d = genarray([10], 0);
-            b_d = genarray([10], false);
-            cycle = false;
-            do{
-                d, bp_d = {[j] -> recv2(i, j, a, b_a, d, b_d) | [j] < [10]};
-                cycle = all(b_d == bp_d);
-                done = all(bp_d);
-                b_d = bp_d;
-            }while(!cycle & !done);
-            ret = d[i];
-            ret_b = !cycle;
-        }
-
+        d = genarray([10], 0);
+        b_d = genarray([10], false);
+        cycle = false;
+        do{
+            d, bp_d = {[j] -> recv2(i, j, a, b_a, d, b_d) | [j] < [10]};
+            cycle = all(b_d == bp_d);
+            done = all(bp_d);
+            b_d = bp_d;
+        }while(!cycle & !done);
+        ret = d[i];
+        ret_b = !cycle;
     }
     return (ret, ret_b);
 }
